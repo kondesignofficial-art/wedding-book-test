@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YUKI & HARUTO | Digital Wedding Book</title>
+  <style>
+    :root {
+      --blue: #0047ff;
+      --yellow: #ffe600;
+      --red: #ff2f2f;
+      --black: #080808;
+      --white: #ffffff;
+      --line: 4px solid var(--black);
+      --radius: 18px;
+      --shadow: 7px 7px 0 var(--black);
+      --nav-h: 70px;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      background: var(--black);
+    }
+    body {
+      margin: 0;
+      color: var(--black);
+      font-family: Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-weight: 800;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+    body.no-scroll { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    figure { margin: 0; }
+    button, a { font: inherit; }
+
+    .page {
+      min-height: 100vh;
+      background: var(--white);
+      padding-bottom: var(--nav-h);
+      overflow: hidden;
+    }
+
+    .section {
+      position: relative;
+      padding: 78px 18px;
+      border-bottom: var(--line);
+      overflow: hidden;
+    }
+    .section-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .blue { background: var(--blue); color: var(--white); }
+    .yellow { background: var(--yellow); color: var(--black); }
+    .white { background: var(--white); color: var(--black); }
+    .black { background: var(--black); color: var(--white); }
+    .red { background: var(--red); color: var(--white); }
+
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 76px 16px 88px;
+      background: var(--blue);
+      color: var(--yellow);
+    }
+    .cover {
+      width: min(100%, 640px);
+      display: grid;
+      gap: 16px;
+    }
+    .kicker {
+      width: fit-content;
+      background: var(--white);
+      color: var(--black);
+      border: var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      box-shadow: 4px 4px 0 var(--black);
+      font-size: 12px;
+    }
+    .hero-title {
+      margin: 0;
+      font-size: clamp(58px, 19vw, 132px);
+      line-height: .78;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-shadow: 5px 5px 0 var(--black);
+    }
+    .hero-sub {
+      margin: 0;
+      color: var(--white);
+      -webkit-text-stroke: 1.5px var(--black);
+      text-shadow: 3px 3px 0 var(--black);
+      font-size: clamp(22px, 7vw, 52px);
+      line-height: .92;
+    }
+
+    .photo-card {
+      position: relative;
+      border: var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      transform: translateZ(0);
+    }
+    .photo-card img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      filter: saturate(1.08) contrast(1.05);
+      transform: scale(var(--zoom, 1.03));
+      transition: transform .2s linear;
+    }
+    .photo-card.wide img { aspect-ratio: 16 / 11; }
+    .photo-card.square img { aspect-ratio: 1 / 1; }
+    .hero .photo-card img {
+      aspect-ratio: 3 / 4;
+      min-height: min(74svh, 620px);
+    }
+    .label {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      z-index: 2;
+      background: var(--blue);
+      color: var(--white);
+      border: 3px solid var(--white);
+      box-shadow: 4px 4px 0 var(--black);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .label.white-box {
+      left: auto;
+      right: 12px;
+      top: auto;
+      bottom: 12px;
+      background: var(--white);
+      color: var(--black);
+      border: 4px solid var(--black);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      border-top: var(--line);
+      border-bottom: var(--line);
+      background: var(--yellow);
+      color: var(--black);
+      white-space: nowrap;
+    }
+    .marquee.fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 30;
+    }
+    .marquee-track {
+      display: inline-flex;
+      gap: 24px;
+      min-width: max-content;
+      padding: 10px 0;
+      animation: marquee 18s linear infinite;
+      will-change: transform;
+    }
+    .marquee span {
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .scroll-type {
+      white-space: nowrap;
+      font-size: clamp(54px, 18vw, 148px);
+      line-height: .82;
+      color: transparent;
+      -webkit-text-stroke: 3px currentColor;
+      text-transform: uppercase;
+      transform: translateX(var(--move, 0));
+      will-change: transform;
+      opacity: .92;
+    }
+    .blue .scroll-type,
+    .black .scroll-type,
+    .red .scroll-type { -webkit-text-stroke-color: var(--white); }
+    .yellow .scroll-type,
+    .white .scroll-type { -webkit-text-stroke-color: var(--black); }
+
+    .section-head {
+      margin: 0 0 24px;
+      font-size: clamp(46px, 16vw, 126px);
+      line-height: .82;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s cubic-bezier(.2, 1.3, .3, 1);
+    }
+    .section-head.is-in { opacity: 1; transform: translateY(0); }
+
+    .split {
+      display: grid;
+      gap: 20px;
+    }
+    .profile-pair {
+      display: grid;
+      gap: 30px;
+    }
+    .profile-block {
+      display: grid;
+      gap: 16px;
+    }
+    .profile-word {
+      margin: 0;
+      font-size: clamp(54px, 18vw, 150px);
+      line-height: .78;
+      color: var(--yellow);
+      text-shadow: 5px 5px 0 var(--black);
+    }
+    .info-card,
+    .nav-card,
+    .guest-card,
+    .dish-card,
+    .time-card,
+    .access-card {
+      border: var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--black);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      opacity: 0;
+      transform: translateY(24px) scale(.98);
+      transition: opacity .5s ease, transform .55s cubic-bezier(.2, 1.45, .34, 1);
+    }
+    .is-in .info-card,
+    .nav-card.is-in,
+    .guest-card.is-in,
+    .dish-card.is-in,
+    .time-card.is-in,
+    .access-card.is-in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .info-card h3,
+    .nav-card h3,
+    .guest-card h3,
+    .dish-card h3,
+    .time-card h3 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      line-height: 1;
+    }
+    .info-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .info-list b {
+      display: inline-block;
+      min-width: 82px;
+      color: var(--blue);
+    }
+
+    .gallery-strip {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(260px, 78vw);
+      gap: 18px;
+      overflow-x: auto;
+      padding: 8px 18px 26px;
+      margin-inline: -18px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .gallery-card {
+      scroll-snap-align: center;
+      position: relative;
+      min-height: 390px;
+    }
+    .gallery-card .photo-card { height: 100%; }
+    .gallery-card img {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+    .count {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      z-index: 2;
+      background: var(--yellow);
+      border: 3px solid var(--black);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 13px;
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .seat-overview {
+      margin: 0 0 24px;
+      padding: 16px;
+      border: var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--black);
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .seat-map-canvas {
+      min-width: 880px;
+      display: grid;
+      gap: 22px;
+    }
+    .head-table {
+      justify-self: center;
+      display: grid;
+      gap: 8px;
+      width: 300px;
+      text-align: center;
+    }
+    .couple-line {
+      display: flex;
+      justify-content: center;
+      gap: 52px;
+      font-size: 18px;
+    }
+    .stage-line {
+      height: 34px;
+      border: 4px solid var(--black);
+      background: var(--red);
+      border-radius: 999px;
+    }
+    .seat-plan {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px 18px;
+      align-items: center;
+    }
+    .map-table {
+      min-height: 150px;
+      position: relative;
+      border: 4px solid var(--black);
+      border-radius: 22px;
+      background: var(--yellow);
+      box-shadow: 5px 5px 0 var(--black);
+      cursor: pointer;
+      appearance: none;
+      color: var(--black);
+      padding: 14px;
+      text-align: left;
+    }
+    .map-table::before {
+      content: attr(data-letter);
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: 86px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--red);
+      color: var(--white);
+      border: 4px solid var(--black);
+      font-size: 42px;
+      line-height: 1;
+    }
+    .map-table small,
+    .map-table strong,
+    .map-table span {
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+    .map-table small {
+      color: var(--blue);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .map-table strong {
+      margin-top: 82px;
+      font-size: 18px;
+    }
+    .map-table span {
+      font-size: 12px;
+    }
+    .table-empty {
+      pointer-events: none;
+      opacity: 0;
+    }
+    .nav-card {
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      appearance: none;
+    }
+    .nav-card:active { transform: translate(4px, 4px); box-shadow: 3px 3px 0 var(--black); }
+    .nav-card small {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--blue);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    .nav-card .big {
+      display: block;
+      font-size: clamp(36px, 11vw, 64px);
+      line-height: .9;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .nav-card .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 3px solid var(--black);
+      padding-top: 12px;
+      font-size: 14px;
+    }
+
+    .timeline-list {
+      display: grid;
+      gap: 14px;
+    }
+    .time-card {
+      display: grid;
+      grid-template-columns: 106px 1fr;
+      gap: 14px;
+      align-items: center;
+      background: var(--yellow);
+    }
+    .time {
+      font-size: 34px;
+      line-height: .9;
+      color: var(--blue);
+    }
+    .event {
+      border-left: 4px solid var(--black);
+      padding-left: 14px;
+      font-size: 22px;
+      text-transform: uppercase;
+    }
+
+    .access-card {
+      background: var(--white);
+      display: grid;
+      gap: 14px;
+    }
+    .map-button,
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: fit-content;
+      min-height: 46px;
+      padding: 12px 18px;
+      background: var(--blue);
+      color: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 999px;
+      box-shadow: 4px 4px 0 var(--black);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .map-button:active,
+    .back-button:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--black); }
+
+    .thanks {
+      min-height: 76svh;
+      display: grid;
+      align-content: center;
+      gap: 24px;
+    }
+    .thanks h2 {
+      margin: 0;
+      color: var(--yellow);
+      text-shadow: 6px 6px 0 var(--black);
+      font-size: clamp(64px, 22vw, 164px);
+      line-height: .78;
+    }
+    .thanks p {
+      margin: 0;
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      padding: 6px;
+      background: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 18px;
+      box-shadow: 4px 4px 0 var(--black);
+    }
+    .bottom-nav a {
+      display: grid;
+      place-items: center;
+      min-height: 42px;
+      border-radius: 12px;
+      color: var(--black);
+      text-decoration: none;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .bottom-nav a:nth-child(odd) { background: var(--yellow); }
+    .bottom-nav a:nth-child(even) { background: var(--blue); color: var(--white); }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: var(--yellow);
+      color: var(--black);
+      transform: translateX(110%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .45s cubic-bezier(.2, .9, .2, 1), opacity .35s ease;
+      overflow: auto;
+    }
+    .overlay.is-open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay.yellow { background: var(--yellow); color: var(--black); }
+    .overlay.blue { background: var(--blue); color: var(--white); }
+    .detail-view {
+      min-height: 100svh;
+      padding: 24px 18px 46px;
+    }
+    .detail-top {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      background: inherit;
+    }
+    .detail-title {
+      margin: 26px 0 20px;
+      font-size: clamp(54px, 18vw, 118px);
+      line-height: .78;
+      text-transform: uppercase;
+    }
+    .detail-lead {
+      display: inline-block;
+      margin: 0 0 20px;
+      background: var(--white);
+      color: var(--black);
+      border: var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: 4px 4px 0 var(--black);
+    }
+    .guest-list,
+    .dish-list {
+      display: grid;
+      gap: 16px;
+      max-width: 760px;
+    }
+    .guest-card,
+    .dish-card {
+      opacity: 1;
+      transform: none;
+    }
+    .guest-card {
+      background: var(--white);
+    }
+    .guest-card p,
+    .dish-card p,
+    .access-card p {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pill {
+      display: inline-flex;
+      border: 3px solid var(--black);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--yellow);
+      font-size: 12px;
+    }
+    .dish-card {
+      display: grid;
+      gap: 12px;
+      background: var(--white);
+    }
+    .dish-photo {
+      border: 3px solid var(--black);
+      border-radius: 14px;
+      min-height: 120px;
+      background:
+        linear-gradient(135deg, rgba(0,71,255,.92), rgba(255,230,0,.78)),
+        radial-gradient(circle at 70% 30%, var(--white) 0 18%, transparent 19%);
+    }
+    .playlist-wrap {
+      display: grid;
+      gap: 24px;
+      align-items: start;
+    }
+    .record-card {
+      position: relative;
+      min-height: 420px;
+      border: var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .record-card::before {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      left: 18%;
+      bottom: 42px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, var(--white) 0 12%, var(--black) 13% 56%, #222 57% 61%, var(--black) 62%);
+      border: 5px solid var(--black);
+    }
+    .record-card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 26px;
+      width: 38%;
+      height: 380px;
+      background: #f3f3f3;
+      border-right: 5px solid var(--black);
+    }
+    .record-label {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 1;
+      background: var(--blue);
+      color: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+    .playlist-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .playlist-card {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: baseline;
+      border-bottom: 3px solid var(--black);
+      padding: 12px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .45s ease, transform .45s cubic-bezier(.2, 1.3, .3, 1);
+    }
+    .playlist-card.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .track-no {
+      color: var(--blue);
+      font-size: 20px;
+    }
+    .track-title {
+      font-size: clamp(18px, 5vw, 30px);
+      line-height: 1.25;
+    }
+    .track-artist {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: #444;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s cubic-bezier(.2, 1.2, .3, 1);
+    }
+    .fade-in.is-in { opacity: 1; transform: translateY(0); }
+
+    @media (min-width: 760px) {
+      .section { padding: 96px 38px; }
+      .cover { width: min(96vw, 980px); }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: .85fr minmax(430px, 560px);
+        gap: 24px;
+        align-items: end;
+      }
+      .split,
+      .profile-pair {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .playlist-wrap {
+        grid-template-columns: minmax(260px, 42%) 1fr;
+      }
+      .gallery-strip {
+        grid-auto-columns: minmax(340px, 36vw);
+      }
+      .bottom-nav {
+        left: 50%;
+        right: auto;
+        width: min(820px, calc(100vw - 32px));
+        transform: translateX(-50%);
+      }
+      .detail-view {
+        padding: 34px min(6vw, 72px) 70px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="marquee fixed" aria-hidden="true">
+    <div class="marquee-track">
+      <span>YUKI & HARUTO WEDDING ISSUE</span><span>LOVE TODAY</span><span>TABLE TALK</span><span>MENU GUIDE</span><span>THANK YOU FOR COMING</span>
+      <span>YUKI & HARUTO WEDDING ISSUE</span><span>LOVE TODAY</span><span>TABLE TALK</span><span>MENU GUIDE</span><span>THANK YOU FOR COMING</span>
+    </div>
+  </div>
+
+  <main class="page" id="top">
+    <section class="hero" aria-label="Hero">
+      <div class="cover">
+        <div class="kicker">SPECIAL WEDDING ISSUE / 2026</div>
+        <div class="hero-grid">
+          <div>
+            <h1 class="hero-title">YUKI<br>&amp;<br>HARUTO</h1>
+            <p class="hero-sub">DIGITAL WEDDING BOOK</p>
+          </div>
+          <figure class="photo-card fade-in">
+            <span class="label">Cover Story</span>
+            <span class="label white-box">Welcome to our day</span>
+            <img alt="新郎新婦の表紙写真" data-photo="couple">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>PROFILE</span><span>GALLERY</span><span>SEAT MAP</span><span>MENU</span><span>BGM</span><span>TIMELINE</span><span>ACCESS</span><span>THANKS</span>
+        <span>PROFILE</span><span>GALLERY</span><span>SEAT MAP</span><span>MENU</span><span>BGM</span><span>TIMELINE</span><span>ACCESS</span><span>THANKS</span>
+      </div>
+    </div>
+
+    <section class="section black" id="profile">
+      <div class="section-inner">
+        <div class="scroll-type">Bride / Groom / Bride / Groom</div>
+        <h2 class="section-head">Profile</h2>
+        <div class="profile-pair">
+          <article class="profile-block fade-in">
+            <h3 class="profile-word">BRIDE</h3>
+            <figure class="photo-card square">
+              <span class="label">Yuki</span>
+              <img alt="Yukiの写真" data-photo="bride">
+            </figure>
+            <div class="info-card">
+              <h3>YUKI</h3>
+              <ul class="info-list">
+                <li><b>出身地</b>神奈川県 横浜市</li>
+                <li><b>好きなもの</b>喫茶店、花、朝の散歩</li>
+                <li><b>ひとこと</b>今日は一緒にたくさん笑ってください。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="profile-block fade-in">
+            <h3 class="profile-word">GROOM</h3>
+            <figure class="photo-card square">
+              <span class="label">Haruto</span>
+              <img alt="Harutoの写真" data-photo="groom">
+            </figure>
+            <div class="info-card">
+              <h3>HARUTO</h3>
+              <ul class="info-list">
+                <li><b>出身地</b>東京都 世田谷区</li>
+                <li><b>好きなもの</b>コーヒー、映画、休日の料理</li>
+                <li><b>ひとこと</b>来てくれて本当にありがとう。</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section yellow" id="gallery">
+      <div class="section-inner">
+        <h2 class="section-head">Gallery</h2>
+        <div class="gallery-strip" aria-label="横スクロールギャラリー">
+          <article class="gallery-card"><figure class="photo-card"><span class="label">First Look</span><span class="count">1/6</span><img alt="ギャラリー写真1" data-photo="gallery1"></figure></article>
+          <article class="gallery-card"><figure class="photo-card"><span class="label">Tokyo Date</span><span class="count">2/6</span><img alt="ギャラリー写真2" data-photo="gallery2"></figure></article>
+          <article class="gallery-card"><figure class="photo-card"><span class="label">Family</span><span class="count">3/6</span><img alt="ギャラリー写真3" data-photo="gallery3"></figure></article>
+          <article class="gallery-card"><figure class="photo-card"><span class="label">Blue Hour</span><span class="count">4/6</span><img alt="ギャラリー写真4" data-photo="gallery4"></figure></article>
+          <article class="gallery-card"><figure class="photo-card"><span class="label">Cheers</span><span class="count">5/6</span><img alt="ギャラリー写真5" data-photo="gallery5"></figure></article>
+          <article class="gallery-card"><figure class="photo-card"><span class="label">Today</span><span class="count">6/6</span><img alt="ギャラリー写真6" data-photo="gallery6"></figure></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section blue" id="seat">
+      <div class="section-inner">
+        <div class="scroll-type">Seat Map / Tap Your Table</div>
+        <h2 class="section-head">Seat Map</h2>
+        <div class="seat-overview fade-in" aria-label="席次表全体図">
+          <div class="seat-map-canvas">
+            <div class="head-table">
+              <div class="couple-line"><span>新郎<br>HARUTO</span><span>新婦<br>YUKI</span></div>
+              <div class="stage-line" aria-hidden="true"></div>
+            </div>
+            <div class="seat-plan" id="seatPlan"></div>
+          </div>
+        </div>
+        <div class="cards-grid" id="tableCards"></div>
+      </div>
+    </section>
+
+    <section class="section white" id="menu">
+      <div class="section-inner">
+        <h2 class="section-head">Menu</h2>
+        <div class="cards-grid" id="menuCards"></div>
+      </div>
+    </section>
+
+    <section class="section yellow" id="bgm">
+      <div class="section-inner">
+        <div class="scroll-type">Here&apos;s today&apos;s playlist / Wedding BGM</div>
+        <h2 class="section-head">Playlist</h2>
+        <div class="playlist-wrap">
+          <div class="record-card fade-in">
+            <span class="record-label">Today&apos;s BGM</span>
+          </div>
+          <ol class="playlist-list" id="playlistList"></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section red" id="timeline">
+      <div class="section-inner">
+        <div class="scroll-type">Today&apos;s Timeline / Today&apos;s Timeline</div>
+        <h2 class="section-head">Timeline</h2>
+        <div class="timeline-list">
+          <article class="time-card"><div class="time">11:30</div><div class="event">Reception</div></article>
+          <article class="time-card"><div class="time">12:00</div><div class="event">Ceremony</div></article>
+          <article class="time-card"><div class="time">13:00</div><div class="event">Party Start</div></article>
+          <article class="time-card"><div class="time">15:30</div><div class="event">Dessert Buffet</div></article>
+          <article class="time-card"><div class="time">16:00</div><div class="event">Closing</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section yellow" id="access">
+      <div class="section-inner">
+        <h2 class="section-head">Access</h2>
+        <div class="split">
+          <figure class="photo-card wide fade-in">
+            <span class="label">Venue</span>
+            <img alt="会場イメージ" data-photo="venue">
+          </figure>
+          <article class="access-card">
+            <h3>THE BLUE HALL AOYAMA</h3>
+            <p>東京都港区南青山 1-2-3</p>
+            <p>受付時間 11:30 / 挙式 12:00</p>
+            <p>東京メトロ 表参道駅 A4出口より徒歩5分。お車でお越しの方は近隣駐車場をご利用ください。</p>
+            <a class="map-button" href="https://www.google.com/maps" target="_blank" rel="noreferrer">Google Map</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section blue thanks" id="thanks">
+      <div class="section-inner">
+        <h2>THANK<br>YOU</h2>
+        <p>今日という一日を、同じ場所で一緒に過ごしてくれてありがとうございます。これからもどうぞよろしくお願いします。</p>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>THANK YOU</span><span>SEE YOU AT THE TABLE</span><span>ENJOY THE PARTY</span><span>YUKI & HARUTO</span>
+        <span>THANK YOU</span><span>SEE YOU AT THE TABLE</span><span>ENJOY THE PARTY</span><span>YUKI & HARUTO</span>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="#profile">Profile</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#seat">Seat</a>
+    <a href="#menu">Menu</a>
+    <a href="#bgm">BGM</a>
+    <a href="#timeline">Time</a>
+    <a href="#access">Access</a>
+  </nav>
+
+  <aside class="overlay" id="overlay" aria-hidden="true"></aside>
+
+  <script>
+    const guestSet = [
+      { name: '佐藤 翔太', note: '乾杯の声がよく通るムードメーカー' },
+      { name: '鈴木 大輔', note: '写真も会話も任せたい盛り上げ役' },
+      { name: '高橋 遥斗', note: 'さりげなく周りを見てくれる人' },
+      { name: '田中 健太', note: '学生時代から変わらない安心感' },
+      { name: '山本 千秋', note: '今日のコーディネートにも注目' },
+      { name: '伊藤 詩織', note: '旅行とおいしいものに詳しい友人' },
+      { name: '中村 結衣', note: 'ふたりの相談にいつも乗ってくれた人' },
+      { name: '小林 咲良', note: '場をぱっと明るくしてくれる人' }
+    ];
+
+    const makeGuests = (leftRelation, rightRelation) => guestSet.map((guest, index) => ({
+      name: guest.name,
+      relation: index < 4 ? leftRelation : rightRelation,
+      note: guest.note
+    }));
+
+    const tables = [
+      { id: 'table-a', letter: 'A', name: 'Table A', group: '新郎友人', position: 'Front left', guests: makeGuests('新郎友人', '新郎友人') },
+      { id: 'table-b', letter: 'B', name: 'Table B', group: '新郎上司', position: 'Front center', guests: makeGuests('新郎上司', '新郎上司') },
+      { id: 'table-c', letter: 'C', name: 'Table C', group: '新婦上司', position: 'Front center', guests: makeGuests('新婦上司', '新婦上司') },
+      { id: 'table-d', letter: 'D', name: 'Table D', group: '新婦友人', position: 'Front right', guests: makeGuests('新婦友人', '新婦友人') },
+      { id: 'table-e', letter: 'E', name: 'Table E', group: '新郎友人', position: 'Middle left', guests: makeGuests('新郎友人', '新郎友人') },
+      { id: 'table-f', letter: 'F', name: 'Table F', group: '友人 MIX', position: 'Middle center', guests: makeGuests('新郎友人', '新婦友人') },
+      { id: 'table-g', letter: 'G', name: 'Table G', group: '新婦友人', position: 'Middle right', guests: makeGuests('新婦友人', '新婦友人') },
+      { id: 'table-h', letter: 'H', name: 'Table H', group: '新郎家族', position: 'Back left', guests: makeGuests('新郎父母', '新郎親族') },
+      { id: 'table-i', letter: 'I', name: 'Table I', group: '新郎親族', position: 'Back center', guests: makeGuests('新郎親族', '新郎親族') },
+      { id: 'table-j', letter: 'J', name: 'Table J', group: '新婦親族', position: 'Back center', guests: makeGuests('新婦親族', '新婦親族') },
+      { id: 'table-k', letter: 'K', name: 'Table K', group: '新婦家族', position: 'Back right', guests: makeGuests('新婦父母', '新婦親族') }
+    ];
+
+    const menus = [
+      {
+        id: 'course',
+        title: 'Special Food',
+        summary: '添付メニューをもとにした今日のコース。',
+        items: [
+          { name: 'Amuse-bouche / アミューズ', desc: 'フレンチキャビアと淡路島産トマトのジュレ。軽やかなジュレにキャビアを添えて。', allergy: '要確認' },
+          { name: 'Entree / 前菜', desc: '瀬戸内海産オマール海老のカクテル サフランの香り。フレッシュな海老とエレガントなサフラン風味。', allergy: 'えび' },
+          { name: 'Soup / スープ', desc: '北海道産カボチャのポタージュ トリュフのエッセンス。', allergy: '乳' },
+          { name: 'Poisson / 魚料理', desc: '駿河湾産ヒラメのポワレ シャンパンクリームソース。', allergy: '乳・小麦' },
+          { name: 'Plat Principal / メインディッシュ', desc: '神戸牛フィレ肉のロティ 赤ワインソース。フランス・ボルドー産の赤ワインソースを添えて。', allergy: '乳・小麦' },
+          { name: 'Dessert / デザート', desc: 'ピスタチオのムースと季節のフルーツの盛り合わせ。', allergy: '卵・乳・ナッツ' }
+        ]
+      },
+      {
+        id: 'drink',
+        title: 'Drink Menu',
+        summary: 'Wine, Beer, Highball, Sour, Whisky, Sake, Shochu, Cocktail。',
+        items: [
+          { name: 'Glass Wine', desc: 'カステル・ドンパール（白） / カステル・ドンパール（赤）' },
+          { name: 'Beer', desc: 'キリン一番搾り〈生ビール〉 / サントリーオールフリー' },
+          { name: 'Highball', desc: '角ハイボール / ジムビームハイボール' },
+          { name: 'Sour', desc: '生搾りレモンサワー / グレープフルーツサワー' },
+          { name: 'Whiskey / Sake / Shochu', desc: '知多、白州、八海山、黒龍、富乃宝山、中々' },
+          { name: 'Cocktail', desc: 'カシスオレンジ、ファジーネーブル、モスコミュール、ジントニック、カルーアミルク、スクリュードライバー、ピーチウーロン' }
+        ]
+      },
+      {
+        id: 'soft',
+        title: 'Soft Drink',
+        summary: 'ノンアルコールもゆっくり選べます。',
+        items: [
+          { name: 'Tea', desc: '烏龍茶 / 緑茶（冷）' },
+          { name: 'Soda', desc: 'ジンジャーエール / コーラ / 炭酸水' },
+          { name: 'Juice', desc: 'オレンジジュース / グレープフルーツジュース / トマトジュース' }
+        ]
+      }
+    ];
+
+    const playlist = [
+      ['SWIM', 'SIRUP'],
+      ['Summer', '久石 譲'],
+      ['Do Well', 'SIRUP'],
+      ['瞳惚れ', 'Vaundy'],
+      ['やさしさにつつまれたなら', '新井由実'],
+      ['Orphans', 'cero'],
+      ['お嫁においで 2015 feat. PUNPEE', 'PUNPEE'],
+      ['friends', 'brb. & SIRUP'],
+      ['The Moment', 'Ryohu'],
+      ['RIDE', 'TENDRE'],
+      ['何億年たっても', 'Tempalay'],
+      ['忘れられないの', 'サカナクション'],
+      ['NEW ERA', 'Nulbarich'],
+      ['ガーデン', '藤井 風'],
+      ['Best Part (feat. H.E.R)', 'Daniel Caesar'],
+      ['遥なる影', 'カーペンターズ'],
+      ['FLOWERS', 'WONK'],
+      ['旅路', '藤井 風'],
+      ['HOME', 'AAAMYYY']
+    ];
+
+    const photoSeeds = {
+      couple: ['#0047ff', '#ffe600', 'YUKI & HARUTO', 'COVER'],
+      bride: ['#ff2f2f', '#ffe600', 'YUKI', 'BRIDE'],
+      groom: ['#0047ff', '#ffffff', 'HARUTO', 'GROOM'],
+      gallery1: ['#0047ff', '#ff2f2f', 'FIRST', 'LOOK'],
+      gallery2: ['#ffe600', '#0047ff', 'TOKYO', 'DATE'],
+      gallery3: ['#ffffff', '#ff2f2f', 'FAMILY', 'DAY'],
+      gallery4: ['#0047ff', '#111111', 'BLUE', 'HOUR'],
+      gallery5: ['#ff2f2f', '#ffe600', 'CHEERS', 'NOW'],
+      gallery6: ['#ffe600', '#ffffff', 'TODAY', 'ISSUE'],
+      venue: ['#0047ff', '#ffe600', 'THE BLUE', 'HALL']
+    };
+
+    const svgPhoto = ([bg, accent, title, sub]) => {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125">
+          <rect width="900" height="1125" fill="${bg}"/>
+          <rect x="58" y="58" width="784" height="1009" rx="42" fill="${accent}" stroke="#080808" stroke-width="18"/>
+          <circle cx="660" cy="315" r="145" fill="#ffffff" opacity=".88" stroke="#080808" stroke-width="14"/>
+          <rect x="130" y="410" width="640" height="470" rx="36" fill="#ffffff" stroke="#080808" stroke-width="16"/>
+          <path d="M130 770 C260 620 350 704 450 590 C560 468 650 590 770 460 L770 880 L130 880 Z" fill="${bg}" opacity=".9"/>
+          <text x="104" y="214" font-family="Arial Black, Arial" font-size="96" font-weight="900" fill="#080808">${title}</text>
+          <text x="104" y="1010" font-family="Arial Black, Arial" font-size="126" font-weight="900" fill="#080808">${sub}</text>
+        </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    };
+
+    document.querySelectorAll('[data-photo]').forEach((img) => {
+      img.src = svgPhoto(photoSeeds[img.dataset.photo]);
+    });
+
+    const seatPlan = document.getElementById('seatPlan');
+    const seatLayout = [...tables.slice(0, 7), null, ...tables.slice(7)];
+    seatPlan.innerHTML = seatLayout.map((table) => {
+      if (!table) return '<div class="table-empty" aria-hidden="true"></div>';
+      return `
+        <button class="map-table" type="button" data-table="${table.id}" data-letter="${table.letter}">
+          <small>${table.position}</small>
+          <strong>${table.name}</strong>
+          <span>${table.group} / ${table.guests.length} guests</span>
+        </button>
+      `;
+    }).join('');
+
+    const tableCards = document.getElementById('tableCards');
+    tableCards.innerHTML = tables.map((table) => `
+      <button class="nav-card" type="button" data-table="${table.id}">
+        <small>${table.group}</small>
+        <span class="big">${table.name}</span>
+        <span class="meta"><span>同卓メンバー紹介</span><span>${table.guests.length} guests</span></span>
+      </button>
+    `).join('');
+
+    const playlistList = document.getElementById('playlistList');
+    playlistList.innerHTML = playlist.map(([title, artist], index) => `
+      <li class="playlist-card">
+        <span class="track-no">${String(index + 1).padStart(2, '0')}</span>
+        <span class="track-title">${title}<span class="track-artist">${artist}</span></span>
+      </li>
+    `).join('');
+
+    const menuCards = document.getElementById('menuCards');
+    menuCards.innerHTML = menus.map((menu) => `
+      <button class="nav-card" type="button" data-menu="${menu.id}">
+        <small>Tap for detail</small>
+        <span class="big">${menu.title}</span>
+        <span class="meta"><span>${menu.summary}</span><span>${menu.items.length} items</span></span>
+      </button>
+    `).join('');
+
+    const overlay = document.getElementById('overlay');
+
+    function openOverlay(html, color = 'yellow') {
+      overlay.className = `overlay is-open ${color}`;
+      overlay.setAttribute('aria-hidden', 'false');
+      overlay.innerHTML = html;
+      document.body.classList.add('no-scroll');
+      overlay.scrollTop = 0;
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+      setTimeout(() => { if (!overlay.classList.contains('is-open')) overlay.innerHTML = ''; }, 420);
+    }
+
+    function tableDetail(id) {
+      const table = tables.find((item) => item.id === id);
+      if (!table) return;
+      openOverlay(`
+        <div class="detail-view">
+          <div class="detail-top">
+            <button class="back-button" type="button" data-back>Back</button>
+            <span class="detail-lead">${table.group} / ${table.guests.length} guests</span>
+          </div>
+          <h2 class="detail-title">${table.name}</h2>
+          <div class="guest-list">
+            ${table.guests.map((guest, index) => `
+              <article class="guest-card">
+                <h3>${String(index + 1).padStart(2, '0')} / ${guest.name}</h3>
+                <p>${guest.note}</p>
+                <div class="pill-row">
+                  <span class="pill">${guest.relation}</span>
+                  <span class="pill">Table Mate</span>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      `, 'yellow');
+    }
+
+    function menuDetail(id) {
+      const menu = menus.find((item) => item.id === id);
+      if (!menu) return;
+      const isDrink = menu.id === 'drink';
+      openOverlay(`
+        <div class="detail-view">
+          <div class="detail-top">
+            <button class="back-button" type="button" data-back>Back</button>
+            <span class="detail-lead">${menu.summary}</span>
+          </div>
+          <h2 class="detail-title">${menu.title}</h2>
+          ${isDrink ? '<p class="detail-lead">Alcohol / Non Alcohol / Soft Drink / Recommendation</p>' : ''}
+          <div class="dish-list">
+            ${menu.items.map((item) => `
+              <article class="dish-card">
+                <div class="dish-photo" aria-hidden="true"></div>
+                <h3>${item.name}</h3>
+                <p>${item.desc}</p>
+                <div class="pill-row">
+                  <span class="pill">${isDrink ? 'Drink' : 'Food'}</span>
+                  ${item.allergy ? `<span class="pill">Allergy: ${item.allergy}</span>` : '<span class="pill">Recommended</span>'}
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      `, isDrink ? 'blue' : 'yellow');
+    }
+
+    document.addEventListener('click', (event) => {
+      const tableButton = event.target.closest('[data-table]');
+      const menuButton = event.target.closest('[data-menu]');
+      const backButton = event.target.closest('[data-back]');
+      if (tableButton) tableDetail(tableButton.dataset.table);
+      if (menuButton) menuDetail(menuButton.dataset.menu);
+      if (backButton) closeOverlay();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && overlay.classList.contains('is-open')) closeOverlay();
+    });
+
+    const inView = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-in');
+      });
+    }, { threshold: .18 });
+
+    document.querySelectorAll('.section-head, .fade-in, .nav-card, .map-table, .time-card, .access-card, .profile-block, .playlist-card').forEach((el) => {
+      inView.observe(el);
+    });
+
+    const zoomPhotos = [...document.querySelectorAll('.photo-card img')];
+    const scrollTypes = [...document.querySelectorAll('.scroll-type')];
+    let ticking = false;
+
+    function onScrollMotion() {
+      const vh = window.innerHeight || 1;
+      zoomPhotos.forEach((img) => {
+        const rect = img.getBoundingClientRect();
+        const progress = Math.max(0, Math.min(1, 1 - Math.abs((rect.top + rect.height / 2) - vh / 2) / vh));
+        img.style.setProperty('--zoom', (1.02 + progress * .09).toFixed(3));
+      });
+      scrollTypes.forEach((el, index) => {
+        const rect = el.getBoundingClientRect();
+        const move = (vh - rect.top) * (index % 2 ? -.16 : .16);
+        el.style.setProperty('--move', `${move}px`);
+      });
+      ticking = false;
+    }
+
+    function requestMotion() {
+      if (!ticking) {
+        requestAnimationFrame(onScrollMotion);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', requestMotion, { passive: true });
+    window.addEventListener('resize', requestMotion);
+    requestMotion();
+  </script>
+</body>
+</html>
